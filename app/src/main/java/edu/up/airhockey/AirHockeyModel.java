@@ -1,26 +1,32 @@
 package edu.up.airhockey;
 
+import android.graphics.Canvas;
+
 public class AirHockeyModel
 {
-    private class AirHockeyPuck
+    public class AirHockeyPuck
     {
-        private float puckDiameter;
-        private float puckCenterX;
-        private float puckCenterY;
-        private float puckSpeedX;
-        private float puckSpeedY;
+        private float diameter;
+        private float centerX;
+        private float centerY;
+        private float speedX;
+        private float speedY;
 
-        public AirHockeyPuck(float puckDiameter, float puckCenterX, float puckCenterY, float puckSpeedX, float puckSpeedY)
+        public AirHockeyPuck(float diameter, float centerX, float centerY, float speedX, float speedY)
         {
-            this.puckDiameter = puckDiameter;
-            this.puckCenterX = puckCenterX;
-            this.puckCenterY = puckCenterY;
-            this.puckSpeedX = puckSpeedX; // per second.
-            this.puckSpeedY = puckSpeedY; // per second.
+            this.diameter = diameter;
+            this.centerX = centerX;
+            this.centerY = centerY;
+            this.speedX = speedX; // per second.
+            this.speedY = speedY; // per second.
         }
+
+        public float getDiameter() { return this.diameter; }
+        public float getCenterX() { return this.centerX; }
+        public float getCenterY() { return this.centerY; }
     }
 
-    private AirHockeyPuck puck;
+    public AirHockeyPuck puck;
 
     public AirHockeyModel()
     {
@@ -31,4 +37,5 @@ public class AirHockeyModel
     {
         this.puck = new AirHockeyPuck(puckDiameter, puckCenterX, puckCenterY, puckSpeedX, puckSpeedY);
     }
+
 }

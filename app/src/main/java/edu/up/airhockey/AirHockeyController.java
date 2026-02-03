@@ -13,7 +13,7 @@ public class AirHockeyController
 
     public void startGame()
     {
-        this.model.spawnPuck(300, 100, 100, 20, 20);
+        this.model.spawnPuck(200, 100, 100, 20, 20);
     }
 
 }
