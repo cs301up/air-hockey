@@ -14,6 +14,8 @@ public class AirHockeyModel
         private float speedX;
         private float speedY;
 
+        private boolean isGrabbed;
+
         public AirHockeyDisc(float diameter, float centerX, float centerY, float speedX, float speedY)
         {
             this.diameter = diameter;
@@ -21,11 +23,46 @@ public class AirHockeyModel
             this.centerY = centerY;
             this.speedX = speedX; // per second.
             this.speedY = speedY; // per second.
+
+            this.isGrabbed = false;
         }
 
         public float getDiameter() { return this.diameter; }
         public float getCenterX() { return this.centerX; }
         public float getCenterY() { return this.centerY; }
+
+        public float calcDistanceFromCenterTo(float x, float y)
+        {
+            float dX = x - this.centerX;
+            float dY = y - this.centerY;
+            return (float) Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
+        }
+
+        public void processGrabAttempt(float grabX, float grabY)
+        {
+            float distanceFromCenterToGrab = this.calcDistanceFromCenterTo(grabX, grabY);
+            float radius = this.diameter / 2;
+            if (distanceFromCenterToGrab <= radius)
+            {
+                this.isGrabbed = true;
+                this.dragCenterTo(grabX, grabY);
+            }
+        }
+
+        public void dragCenterTo(float x, float y)
+        {
+            this.centerX = x;
+            this.centerY = y;
+            this.speedX = 0;
+            this.speedY = 0;
+        }
+
+        public void release()
+        {
+            this.isGrabbed = false;
+        }
+
+        public boolean isGrabbed() { return this.isGrabbed; }
     }
 
     public List<AirHockeyDisc> discs;
