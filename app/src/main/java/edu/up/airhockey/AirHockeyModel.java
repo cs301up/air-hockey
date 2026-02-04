@@ -38,6 +38,18 @@ public class AirHockeyModel
             return (float) Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
         }
 
+        private void processPossibleCollisionWithLeftWall()
+        {
+            float distanceFromCenterToLeftWall = this.centerX;
+            float radius = this.diameter / 2;
+            float distanceFromEdgeToLeftWall = distanceFromCenterToLeftWall - radius;
+
+            if (distanceFromEdgeToLeftWall <= 0)
+            {
+                this.speedX *= -1;
+            }
+        }
+
         public void processGrabAttempt(float grabX, float grabY)
         {
             float distanceFromCenterToGrab = this.calcDistanceFromCenterTo(grabX, grabY);
@@ -83,10 +95,21 @@ public class AirHockeyModel
         while (discBrowser.hasNext())
         {
             AirHockeyDisc disc = discBrowser.next();
+
+            // Collisions.
+            disc.processPossibleCollisionWithLeftWall();
+            //this.processPossibleCollisionWithRightWall();
+
+
+
             disc.centerX += disc.speedX;
             disc.centerY += disc.speedY;
+
+
         }
 
     }
+
+
 
 }
