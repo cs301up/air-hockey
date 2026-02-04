@@ -54,22 +54,24 @@ public class MainActivity extends AppCompatActivity
         takesOneTimeStep = new Runnable() {
             @Override
             public void run() {
+                // [performance improvement idea] Start a timer here.
                 try {
-                    // Call your method here
+
                     airHockeyController.takeATimeStep();
+
                 } finally {
-                    // Schedule the next execution
+                    // [performance improvement idea] Stop the timer here.
+                    // [performance improvement idea] Calculate UPDATE_INTERVAL_MS - elapsedTime from timer. If negative, clip to zero and issue a warning.
                     handler.postDelayed(this, UPDATE_INTERVAL_MS);
                 }
             }
         };
-        // Initial call to start the process
-        handler.postDelayed(takesOneTimeStep, UPDATE_INTERVAL_MS);
+        handler.postDelayed(takesOneTimeStep, UPDATE_INTERVAL_MS); // Initial call to start the process.
     }
 
     private void stopTakingTimeSteps() {
         if (handler != null && takesOneTimeStep != null) {
-            handler.removeCallbacks(takesOneTimeStep); // Prevents memory leaks and stops the task
+            handler.removeCallbacks(takesOneTimeStep); // Prevents memory leaks and stops the task.
         }
     }
 }
