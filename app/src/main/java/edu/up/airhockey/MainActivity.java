@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity
 {
     private AirHockeyController airHockeyController;
 
-    private static final int UPDATE_INTERVAL_MS = 20;
+    private static final int UPDATE_INTERVAL_MS = 25;
     private Handler handler = new Handler(Looper.getMainLooper());
     private Runnable takesOneTimeStep;
 

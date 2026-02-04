@@ -1,7 +1,6 @@
 package edu.up.airhockey;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class AirHockeyModel
@@ -67,6 +66,40 @@ public class AirHockeyModel
             }
         }
 
+        private void processPossibleCollisionsWithOtherDiscs() {
+            for (AirHockeyDisc otherDisc : discs) {
+                if (otherDisc == this) {
+                    continue;
+                }
+
+                float centerToCenterDistance = this.calcDistanceFromCenterTo(otherDisc.centerX, otherDisc.centerY);
+                float thisRadius = this.diameter / 2;
+                float otherRadius = otherDisc.diameter / 2;
+                float edgeToEdgeDistance = centerToCenterDistance - thisRadius - otherRadius;
+                if (edgeToEdgeDistance > 0) {
+                    continue;
+                }
+
+                // Note that imparting momentum is not implemented -- each disc treats the other disc as stationary.
+                // When we do implement imparting momentum, note that we will probably need to update disc speeds all at once, after both discs have processed the collision.
+                float thisCenterToThatCenterX = otherDisc.centerX - this.centerX;
+                float thisCenterToThatCenterY = otherDisc.centerY - this.centerY;
+                float thisCenterToThatCenterDistance = (float) Math.sqrt(Math.pow(thisCenterToThatCenterX, 2) + Math.pow(thisCenterToThatCenterY, 2));
+                float thisCenterToThatCenterUnitX = thisCenterToThatCenterX / thisCenterToThatCenterDistance;
+                float thisCenterToThatCenterUnitY = thisCenterToThatCenterY / thisCenterToThatCenterDistance;
+                float thisCenterToThatCenterSpeed = (thisCenterToThatCenterUnitX * this.speedX) + (thisCenterToThatCenterUnitY * this.speedY);
+                if (thisCenterToThatCenterSpeed <= 0) { continue; } // Object is moving away from collision surface; CHANGE to implement momentum being imparted.
+                float thisCenterToThatCenterSpeedX = thisCenterToThatCenterSpeed * thisCenterToThatCenterUnitX;
+                float thisCenterToThatCenterSpeedY = thisCenterToThatCenterSpeed * thisCenterToThatCenterUnitY;
+                float remainingSpeedX = this.speedX - thisCenterToThatCenterSpeedX;
+                float remainingSpeedY = this.speedY - thisCenterToThatCenterSpeedY;
+                thisCenterToThatCenterSpeedX *= -1;
+                thisCenterToThatCenterSpeedY *= -1;
+                this.speedX = thisCenterToThatCenterSpeedX + remainingSpeedX;
+                this.speedY = thisCenterToThatCenterSpeedY + remainingSpeedY;
+            }
+        }
+
         public void processGrabAttempt(float grabX, float grabY)
         {
             float distanceFromCenterToGrab = this.calcDistanceFromCenterTo(grabX, grabY);
@@ -120,15 +153,11 @@ public class AirHockeyModel
 
     public void takeATimeStep()
     {
-        Iterator<AirHockeyDisc> discBrowser = this.discs.iterator();
-        while (discBrowser.hasNext())
+        for (AirHockeyDisc disc : this.discs)
         {
-            AirHockeyDisc disc = discBrowser.next();
-
-            // Collisions.
             disc.processPossibleCollisionWithLeftWall();
             disc.processPossibleCollisionWithRightWall();
-
+            disc.processPossibleCollisionsWithOtherDiscs();
 
             disc.centerX += disc.speedX;
             disc.centerY += disc.speedY;
