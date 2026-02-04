@@ -34,10 +34,12 @@ public class AirHockeyView extends SurfaceView
 
     private void drawPuck(Canvas canvas)
     {
-        float diameter = this.model.puck.getDiameter();
-        float topLeftCornerX = this.model.puck.getCenterX() - (diameter / 2);
-        float topLeftCornerY = this.model.puck.getCenterY() - (diameter / 2);
-        canvas.drawOval(topLeftCornerX, topLeftCornerY, diameter, diameter, this.puckPaint);
+        float radius = this.model.puck.getDiameter() / 2;
+        float left = this.model.puck.getCenterX() - radius;
+        float right = this.model.puck.getCenterX() + radius;
+        float top = this.model.puck.getCenterY() - radius;
+        float bottom = this.model.puck.getCenterY() + radius;
+        canvas.drawOval(left, top, right, bottom, this.puckPaint);
     }
 
     @Override

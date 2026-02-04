@@ -1,6 +1,8 @@
 package edu.up.airhockey;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +12,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity
 {
+    private AirHockeyController airHockeyController;
+
+    private static final int UPDATE_INTERVAL_MS = 10;
+    private Handler handler = new Handler(Looper.getMainLooper());
+    private Runnable takesOneTimeStep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -25,9 +32,44 @@ public class MainActivity extends AppCompatActivity
         });
 
         AirHockeyView airHockeyView = findViewById(R.id.airhockeyview);
-        AirHockeyController airHockeyController = new AirHockeyController(airHockeyView);
+        this.airHockeyController = new AirHockeyController(airHockeyView);
 
 
-        airHockeyController.startGame();
+        this.airHockeyController.startGame();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startTakingTimeSteps();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopTakingTimeSteps();
+    }
+
+    private void startTakingTimeSteps() {
+        takesOneTimeStep = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Call your method here
+                    airHockeyController.takeATimeStep();
+                } finally {
+                    // Schedule the next execution
+                    handler.postDelayed(this, UPDATE_INTERVAL_MS);
+                }
+            }
+        };
+        // Initial call to start the process
+        handler.postDelayed(takesOneTimeStep, UPDATE_INTERVAL_MS);
+    }
+
+    private void stopTakingTimeSteps() {
+        if (handler != null && takesOneTimeStep != null) {
+            handler.removeCallbacks(takesOneTimeStep); // Prevents memory leaks and stops the task
+        }
     }
 }

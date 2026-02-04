@@ -1,7 +1,5 @@
 package edu.up.airhockey;
 
-import android.graphics.Canvas;
-
 public class AirHockeyModel
 {
     public class AirHockeyPuck
@@ -36,6 +34,12 @@ public class AirHockeyModel
     public void spawnPuck(float puckDiameter, float puckCenterX, float puckCenterY, float puckSpeedX, float puckSpeedY)
     {
         this.puck = new AirHockeyPuck(puckDiameter, puckCenterX, puckCenterY, puckSpeedX, puckSpeedY);
+    }
+
+    public void takeATimeStep()
+    {
+        this.puck.centerX += this.puck.speedX;
+        this.puck.centerY += this.puck.speedY;
     }
 
 }

@@ -16,4 +16,10 @@ public class AirHockeyController
         this.model.spawnPuck(200, 100, 100, 20, 20);
     }
 
+    public void takeATimeStep()
+    {
+        this.model.takeATimeStep();
+        this.view.postInvalidate();
+    }
+
 }
