@@ -100,7 +100,7 @@ public class AirHockeyModel
             }
         }
 
-        public void processGrabAttempt(float grabX, float grabY)
+        public void attemptGrabAt(float grabX, float grabY)
         {
             float distanceFromCenterToGrab = this.calcDistanceFromCenterTo(grabX, grabY);
             float radius = this.diameter / 2;
