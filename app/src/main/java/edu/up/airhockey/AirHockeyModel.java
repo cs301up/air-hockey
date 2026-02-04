@@ -50,6 +50,23 @@ public class AirHockeyModel
             }
         }
 
+        private void processPossibleCollisionWithRightWall()
+        {
+            if (rinkWidth == null)
+            {
+                return;
+            }
+
+            float distanceFromCenterToRightWall = rinkWidth - this.centerX;
+            float radius = this.diameter / 2;
+            float distanceFromEdgeToRightWall = distanceFromCenterToRightWall - radius;
+
+            if (distanceFromEdgeToRightWall <= 0)
+            {
+                this.speedX *= -1;
+            }
+        }
+
         public void processGrabAttempt(float grabX, float grabY)
         {
             float distanceFromCenterToGrab = this.calcDistanceFromCenterTo(grabX, grabY);
@@ -77,11 +94,23 @@ public class AirHockeyModel
         public boolean isGrabbed() { return this.isGrabbed; }
     }
 
+    public Integer rinkWidth;
+    public Integer rinkHeight;
+
     public List<AirHockeyDisc> discs;
 
     public AirHockeyModel()
     {
+        this.rinkWidth = null;
+        this.rinkHeight = null;
+
         this.discs = new ArrayList<>(3);
+    }
+
+    public void setRinkDimensions(int rinkWidth, int rinkHeight)
+    {
+        this.rinkWidth = rinkWidth;
+        this.rinkHeight = rinkHeight;
     }
 
     public void spawnDisc(float diameter, float centerX, float centerY, float speedX, float speedY)
@@ -98,8 +127,7 @@ public class AirHockeyModel
 
             // Collisions.
             disc.processPossibleCollisionWithLeftWall();
-            //this.processPossibleCollisionWithRightWall();
-
+            disc.processPossibleCollisionWithRightWall();
 
 
             disc.centerX += disc.speedX;

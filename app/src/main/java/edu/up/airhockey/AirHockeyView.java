@@ -5,11 +5,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import androidx.annotation.NonNull;
 
 import java.util.Iterator;
 
-public class AirHockeyView extends SurfaceView
+public class AirHockeyView extends SurfaceView implements SurfaceHolder.Callback
 {
     private AirHockeyModel model;
 
@@ -18,6 +22,8 @@ public class AirHockeyView extends SurfaceView
     public AirHockeyView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
+
+        getHolder().addCallback(this); // See implementation of SurfaceHolder.Callback.
 
         this.model = new AirHockeyModel();
 
@@ -28,6 +34,21 @@ public class AirHockeyView extends SurfaceView
 
         setBackgroundColor(Color.WHITE);
     }
+
+    /* Begin implementation of SurfaceHolder.Callback */
+    @Override
+    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int surfaceWidthInPixels, int surfaceHeightInPixels)
+    {
+        Log.d("AirHockey", "Width: " + surfaceWidthInPixels + ", Height: " + surfaceHeightInPixels);
+        this.model.setRinkDimensions(surfaceWidthInPixels, surfaceHeightInPixels);
+    }
+
+    @Override
+    public void surfaceCreated(@NonNull SurfaceHolder holder) { /* Surface is created, but dimensions might not be final yet. */ }
+
+    @Override
+    public void surfaceDestroyed(@NonNull SurfaceHolder holder) { /* No-op. */ }
+    /* End implementation of SurfaceHolder.Callback */
 
     public AirHockeyModel getModel()
     {
@@ -55,4 +76,6 @@ public class AirHockeyView extends SurfaceView
     {
         this.drawDiscs(canvas);
     }
+
+
 }

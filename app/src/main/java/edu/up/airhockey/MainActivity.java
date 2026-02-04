@@ -3,6 +3,7 @@ package edu.up.airhockey;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +15,7 @@ public class MainActivity extends AppCompatActivity
 {
     private AirHockeyController airHockeyController;
 
-    private static final int UPDATE_INTERVAL_MS = 100;
+    private static final int UPDATE_INTERVAL_MS = 20;
     private Handler handler = new Handler(Looper.getMainLooper());
     private Runnable takesOneTimeStep;
 
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity
         AirHockeyView airHockeyView = findViewById(R.id.airhockeyview);
         this.airHockeyController = new AirHockeyController(airHockeyView);
 
+        Log.i("AirHockey", ""+airHockeyView.getRight());
+        //System.out.println(this.rinkHeight);
 
         this.airHockeyController.startGame();
     }
