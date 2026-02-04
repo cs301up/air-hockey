@@ -13,7 +13,10 @@ public class AirHockeyController
 
     public void startGame()
     {
-        this.model.spawnPuck(200, 100, 100, 20, 20);
+        float diameter = 200;
+        this.model.spawnDisc(diameter, 100, 100, 20, 20);
+        this.model.spawnDisc(diameter, 300, 500, 20, 20);
+        this.model.spawnDisc(diameter, 400, 1000, 20, 20);
     }
 
     public void takeATimeStep()

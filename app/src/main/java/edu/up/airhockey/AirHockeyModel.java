@@ -1,8 +1,12 @@
 package edu.up.airhockey;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 public class AirHockeyModel
 {
-    public class AirHockeyPuck
+    public class AirHockeyDisc
     {
         private float diameter;
         private float centerX;
@@ -10,7 +14,7 @@ public class AirHockeyModel
         private float speedX;
         private float speedY;
 
-        public AirHockeyPuck(float diameter, float centerX, float centerY, float speedX, float speedY)
+        public AirHockeyDisc(float diameter, float centerX, float centerY, float speedX, float speedY)
         {
             this.diameter = diameter;
             this.centerX = centerX;
@@ -24,22 +28,28 @@ public class AirHockeyModel
         public float getCenterY() { return this.centerY; }
     }
 
-    public AirHockeyPuck puck;
+    public List<AirHockeyDisc> discs;
 
     public AirHockeyModel()
     {
-        this.puck = null;
+        this.discs = new ArrayList<>(3);
     }
 
-    public void spawnPuck(float puckDiameter, float puckCenterX, float puckCenterY, float puckSpeedX, float puckSpeedY)
+    public void spawnDisc(float diameter, float centerX, float centerY, float speedX, float speedY)
     {
-        this.puck = new AirHockeyPuck(puckDiameter, puckCenterX, puckCenterY, puckSpeedX, puckSpeedY);
+        this.discs.add(new AirHockeyDisc(diameter, centerX, centerY, speedX, speedY));
     }
 
     public void takeATimeStep()
     {
-        this.puck.centerX += this.puck.speedX;
-        this.puck.centerY += this.puck.speedY;
+        Iterator<AirHockeyDisc> discBrowser = this.discs.iterator();
+        while (discBrowser.hasNext())
+        {
+            AirHockeyDisc disc = discBrowser.next();
+            disc.centerX += disc.speedX;
+            disc.centerY += disc.speedY;
+        }
+
     }
 
 }

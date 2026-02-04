@@ -7,11 +7,13 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
 
+import java.util.Iterator;
+
 public class AirHockeyView extends SurfaceView
 {
     private AirHockeyModel model;
 
-    private Paint puckPaint = new Paint();
+    private Paint discPaint = new Paint();
 
     public AirHockeyView(Context context, AttributeSet attrs)
     {
@@ -21,8 +23,8 @@ public class AirHockeyView extends SurfaceView
 
         setWillNotDraw(false); // This is essential or your onDraw method won't get called.
 
-        this.puckPaint.setColor(0xFFC755B5);  // Violet-red.
-        this.puckPaint.setStyle(Paint.Style.FILL);
+        this.discPaint.setColor(0xFFC755B5);  // Violet-red.
+        this.discPaint.setStyle(Paint.Style.FILL);
 
         setBackgroundColor(Color.WHITE);
     }
@@ -32,19 +34,25 @@ public class AirHockeyView extends SurfaceView
         return this.model;
     }
 
-    private void drawPuck(Canvas canvas)
+    private void drawDiscs(Canvas canvas)
     {
-        float radius = this.model.puck.getDiameter() / 2;
-        float left = this.model.puck.getCenterX() - radius;
-        float right = this.model.puck.getCenterX() + radius;
-        float top = this.model.puck.getCenterY() - radius;
-        float bottom = this.model.puck.getCenterY() + radius;
-        canvas.drawOval(left, top, right, bottom, this.puckPaint);
+        Iterator<AirHockeyModel.AirHockeyDisc> discBrowser = this.model.discs.iterator();
+        while (discBrowser.hasNext())
+        {
+            AirHockeyModel.AirHockeyDisc disc = discBrowser.next();
+            float radius = disc.getDiameter() / 2;
+            float left = disc.getCenterX() - radius;
+            float right = disc.getCenterX() + radius;
+            float top = disc.getCenterY() - radius;
+            float bottom = disc.getCenterY() + radius;
+            canvas.drawOval(left, top, right, bottom, this.discPaint);
+        }
+
     }
 
     @Override
     public void onDraw(Canvas canvas)
     {
-        this.drawPuck(canvas);
+        this.drawDiscs(canvas);
     }
 }
