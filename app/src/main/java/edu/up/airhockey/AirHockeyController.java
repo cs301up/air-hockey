@@ -1,6 +1,11 @@
 package edu.up.airhockey;
 
-public class AirHockeyController
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.util.Log;
+
+public class AirHockeyController implements SensorEventListener
 {
     private AirHockeyView view;
     private AirHockeyModel model;
@@ -25,4 +30,16 @@ public class AirHockeyController
         this.view.postInvalidate();
     }
 
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy)
+    {
+        Log.i("AirHockey", "Sensor accuracy is now " + accuracy);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event)
+    {
+        Log.i("AirHockey", "Gravity (x,y,z):" + event.values[0] + "," + event.values[1] + "," + event.values[2]);
+        this.model.setGravity(event.values[0], event.values[1]);
+    }
 }

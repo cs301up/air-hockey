@@ -1,5 +1,8 @@
 package edu.up.airhockey;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,6 +22,9 @@ public class MainActivity extends AppCompatActivity
     private Handler handler = new Handler(Looper.getMainLooper());
     private Runnable takesOneTimeStep;
 
+    private SensorManager sensorManager;
+    private Sensor sensor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -37,6 +43,11 @@ public class MainActivity extends AppCompatActivity
 
         Log.i("AirHockey", ""+airHockeyView.getRight());
         //System.out.println(this.rinkHeight);
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        int samplingPeriodInMicroseconds = (int) 1e5;
+        sensorManager.registerListener(this.airHockeyController, sensor, samplingPeriodInMicroseconds);
 
         this.airHockeyController.startGame();
     }

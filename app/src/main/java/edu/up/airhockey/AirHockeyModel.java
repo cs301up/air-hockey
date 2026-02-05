@@ -130,12 +130,20 @@ public class AirHockeyModel
     public Integer rinkWidth;
     public Integer rinkHeight;
 
+    private float gravitySensitivity;
+    private float gravityX;
+    private float gravityY;
+
     public List<AirHockeyDisc> discs;
 
     public AirHockeyModel()
     {
         this.rinkWidth = null;
         this.rinkHeight = null;
+
+        this.gravitySensitivity = 0.5f;
+        this.gravityX = 0f;
+        this.gravityY = 0f;
 
         this.discs = new ArrayList<>(3);
     }
@@ -163,8 +171,17 @@ public class AirHockeyModel
             disc.centerY += disc.speedY;
 
 
+            //disc.speedX += this.gravityX * this.gravitySensitivity * -1;
+            disc.speedY += this.gravityY * this.gravitySensitivity;
+
         }
 
+    }
+
+    public void setGravity(float gravityX, float gravityY)
+    {
+        this.gravityX = gravityX;
+        this.gravityY = gravityY;
     }
 
 
